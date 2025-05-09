@@ -1,5 +1,6 @@
 import math
 import random
+from collections import Counter
 
 suits = ['hearts', 'diamonds', 'clubs', 'spades']
 ranks = list(range(1, 14))
@@ -29,29 +30,45 @@ count_no_win = 0
 for i in range(times_ran):
     money -= 10
     card_list = draw_card(cards_drawn)
-    
+
     ranks_drawn = [rank for (rank, suit) in card_list]
     suits_drawn = [suit for (rank, suit) in card_list]
     colors_drawn = ['red' if suit in ['hearts', 'diamonds'] else 'black' for suit in suits_drawn]
-    
-    if any(ranks_drawn.count(rank) == 3 for rank in set(ranks_drawn)):
-        money += 60  # 3 of a kind
+
+    rank_counts = list(Counter(ranks_drawn).values())
+    suit_counts = list(Counter(suits_drawn).values())
+    red_count = colors_drawn.count('red')
+    black_count = colors_drawn.count('black')
+
+    is_win = False
+
+    if rank_counts.count(3) >= 1:
+        money += 60
         count_3_of_a_kind += 1
-    elif sum(1 for rank in ranks_drawn if rank in [11, 12, 13]) == 3:
-        money += 20  # 3 face cards
+        is_win = True
+
+    if sum(1 for rank in ranks_drawn if rank in [11, 12, 13]) == 3:
+        money += 20
         count_3_face_cards += 1
-    elif any(suits_drawn.count(suit) == 3 for suit in set(suits_drawn)):
-        money += 15  # 3 of the same suit
+        is_win = True
+
+    if 3 in suit_counts and max(suit_counts) == 3:
+        money += 15
         count_3_same_suit += 1
-    elif sum(1 for rank in ranks_drawn if rank <= 10) == 3:
-        money += 10  # 3 non-face cards
+        is_win = True
+
+    if sum(1 for rank in ranks_drawn if rank <= 10) == 3:
+        money += 10
         count_3_non_face += 1
-    elif colors_drawn.count('red') == 3 or colors_drawn.count('black') == 3:
-        money += 5   # 3 of the same color
+        is_win = True
+
+    if (red_count == 3 and black_count == 2) or (black_count == 3 and red_count == 2):
+        money += 5
         count_3_same_color += 1
-    else:
+        is_win = True
+
+    if not is_win:
         count_no_win += 1
-    
 
 
 print("Average money loss/gain: " + str(money / times_ran) + "\n")
