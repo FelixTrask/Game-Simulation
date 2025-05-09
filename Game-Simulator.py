@@ -17,7 +17,7 @@ def draw_card(card_number):
     return card_list
 
 money = 0
-times_ran = 1000000
+times_ran = 10000000
 cards_drawn = 5
 
 count_3_of_a_kind = 0
