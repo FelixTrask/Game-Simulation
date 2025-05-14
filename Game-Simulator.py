@@ -46,28 +46,23 @@ for i in range(times_ran):
         money += 60
         count_3_of_a_kind += 1
         is_win = True
-
-    if sum(1 for rank in ranks_drawn if rank in [11, 12, 13]) == 3:
+    elif sum(1 for rank in ranks_drawn if rank in [11, 12, 13]) == 3:
         money += 20
         count_3_face_cards += 1
         is_win = True
-
-    if 3 in suit_counts and max(suit_counts) == 3:
-        money += 15
+    elif 3 in suit_counts and max(suit_counts) == 3:
+        money += 10
         count_3_same_suit += 1
         is_win = True
-
-    if sum(1 for rank in ranks_drawn if rank <= 10) == 3:
-        money += 10
+    elif sum(1 for rank in ranks_drawn if rank <= 10) == 3:
+        money += 15
         count_3_non_face += 1
         is_win = True
-
-    if (red_count == 3 and black_count == 2) or (black_count == 3 and red_count == 2):
+    elif (red_count == 3 and black_count == 2) or (black_count == 3 and red_count == 2):
         money += 5
         count_3_same_color += 1
         is_win = True
-
-    if not is_win:
+    elif not is_win:
         count_no_win += 1
 
 
